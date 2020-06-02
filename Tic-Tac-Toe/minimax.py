@@ -1,5 +1,6 @@
 import os
 import random
+import math
 
 class Board():
     def __init__(self):
@@ -61,6 +62,48 @@ class Contestants():
         else:
             self.computer = "X"
 
+    def player_move(self, board, player):
+        player_move = int(input("Pick your move, 1-9: "))
+        
+        player_turn = True
+        while player_turn:
+            if not board.check_cell_empty(player_move):
+                board.update_cell(player_move, player)
+                break
+            else:
+                print("This spot is already taken")
+
+    def make_best_move(self, board, computer):
+            bestScore = -math.inf
+            bestMove = None
+            move = 1
+            for move in range(len(board.cells)):
+                if board.cells[move] == "":
+                    board.update_cell(move, computer)
+                    score = self.minimax(False, board, computer)
+                    empty_string = ""
+                    board.update_cell(move, empty_string)
+                    if (score > bestScore):
+                        bestScore = score
+                        bestMove = move
+            board.update_cell(bestMove, computer)
+
+    def minimax(self, isMaxTurn, board, computer):
+        if board.who_won() == None:
+            return 0
+        elif board.who_won():
+            return 1 if board.who_won() == computer else -1
+
+        scores = []
+        for move in range(len(board.cells)):
+            if board.cells[move] == "":
+                board.update_cell(move, computer)
+                scores.append(self.minimax(not isMaxTurn, board, computer))
+                empty_string = ""
+                board.update_cell(move, empty_string)
+
+        return max(scores) if isMaxTurn else min(scores)
+
 
 #Game play
 board = Board()
@@ -80,15 +123,7 @@ if player == "X":
     game_is_on = True
     while game_is_on:
         board.drawBoard()
-        player_move = int(input("Pick your move, 1-9: "))
-        
-        player_turn = True
-        while player_turn:
-            if not board.check_cell_empty(player_move):
-                board.update_cell(player_move, player)
-                break
-            else:
-                print("This spot is already taken") 
+        contestant.player_move(board, player)
         
         if board.who_won():
             if board.who_won() == player:
@@ -99,12 +134,7 @@ if player == "X":
                 print("Computer has won")
             game_is_on = False
         else:
-            computer_turn = True
-            while computer_turn:
-                computer_move = random.randint(1, 10)
-                if not board.check_cell_empty(computer_move):
-                    board.update_cell(computer_move, computer)
-                    computer_turn = False
+            contestant.make_best_move(board, computer)
         
             if board.who_won():
                 if board.who_won() == computer:
@@ -121,13 +151,7 @@ else:
     print("\nLet the game begin!!!")
     game_is_on = True
     while game_is_on:
-        computer_turn = True
-        while computer_turn:
-            computer_move = random.randint(1, 10)
-            if not board.check_cell_empty(computer_move):
-                board.update_cell(computer_move, computer)
-                board.drawBoard()
-                computer_turn = False
+        contestant.make_best_move(board, computer)
         
         if board.who_won():
             if board.who_won() == computer:
@@ -138,14 +162,7 @@ else:
                 print("Player has won")
             game_is_on = False
         else:
-            player_move = int(input("Pick your move, 1-9: "))
-            player_turn = True
-            while player_turn:
-                if not board.check_cell_empty(player_move):
-                    board.update_cell(player_move, player)
-                    break
-            else:
-                print("This spot is already taken")
+            contestant.player_move(board, player)
 
             if board.who_won():
                 if board.who_won() == player:
