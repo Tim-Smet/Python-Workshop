@@ -18,8 +18,7 @@ class Board():
         return self.cells[cell_no]
 
     def update_cell(self, cell_no, player):
-        if not self.check_cell_empty(cell_no):
-            self.cells[cell_no] = player
+        self.cells[cell_no] = player
 
     def who_won(self):
         #Diagonal
@@ -74,19 +73,19 @@ class Contestants():
                 print("This spot is already taken")
 
     def make_best_move(self, board, computer):
-            bestScore = -math.inf
-            bestMove = None
-            move = 1
-            for move in range(len(board.cells)):
-                if board.cells[move] == "":
-                    board.update_cell(move, computer)
-                    score = self.minimax(False, board, computer)
-                    empty_string = ""
-                    board.update_cell(move, empty_string)
-                    if (score > bestScore):
-                        bestScore = score
-                        bestMove = move
-            board.update_cell(bestMove, computer)
+        bestScore = -math.inf
+        bestMove = None
+        move = 1
+        for move in range(1, len(board.cells)):
+            if board.cells[move] == "":
+                board.update_cell(move, computer)
+                score = self.minimax(False, board, computer)
+                empty_string = ""
+                board.update_cell(move, empty_string)
+                if (score > bestScore):
+                    bestScore = score
+                    bestMove = move
+        board.update_cell(bestMove, computer)
 
     def minimax(self, isMaxTurn, board, computer):
         if board.who_won() == None:
@@ -101,6 +100,9 @@ class Contestants():
                 scores.append(self.minimax(not isMaxTurn, board, computer))
                 empty_string = ""
                 board.update_cell(move, empty_string)
+                
+            #if (isMaxTurn and max(scores) == 1):
+             #   break
 
         return max(scores) if isMaxTurn else min(scores)
 
@@ -133,6 +135,7 @@ if player == "X":
                 board.drawBoard()
                 print("Computer has won")
             game_is_on = False
+
         else:
             contestant.make_best_move(board, computer)
         
@@ -152,6 +155,7 @@ else:
     game_is_on = True
     while game_is_on:
         contestant.make_best_move(board, computer)
+        board.drawBoard()
         
         if board.who_won():
             if board.who_won() == computer:
