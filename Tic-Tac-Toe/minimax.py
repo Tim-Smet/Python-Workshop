@@ -136,6 +136,10 @@ if player == "X":
                 print("Computer has won")
             game_is_on = False
 
+        elif "" not in board.cells:
+            print("This is a draw")
+            game_is_on = False
+
         else:
             contestant.make_best_move(board, computer)
         
@@ -165,6 +169,11 @@ else:
                 board.drawBoard()
                 print("Player has won")
             game_is_on = False
+
+        elif "" not in board.cells:
+            print("This is a draw")
+            game_is_on = False
+
         else:
             contestant.player_move(board, player)
 
