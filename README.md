@@ -2,7 +2,10 @@
 
 Hello everyone, welcome to my workshop: Introduction to Python.
 The goal is to make you familiar with the basic usage of Python.
-I will first give an explanation about Python and afterwards we can start with doing some fun tutorials. 
+I will first give an explanation about Python and afterwards we can start with a cool tutorial.
+We or at least you will create the game tic tac toe. This is a very simple game (to explain).
+But to for a beginner it can be quite the challenge to code it.
+This will be the perfect way to get familiar with Python. 
 
 ## Installation guide
 The latest version of Python is Python 3.8.3.
