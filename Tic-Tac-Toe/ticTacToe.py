@@ -56,25 +56,25 @@ class Board():
     # For you to figure out how many options there are to win.
     def check_winner(self):
         #diagonals
-        if self.cells[1] == self.cells[5] == self.cells[9]:
+        if self.cells[1] == self.cells[5] and self.cells[5] == self.cells[9]:
             return self.cells[1]
-        if self.cells[3] == self.cells[5] == self.cells[7]:
+        if self.cells[3] == self.cells[5] and self.cells[5] == self.cells[7]:
             return self.cells[3]
 
         #Horizontals
-        if self.cells[1] == self.cells[2] == self.cells[3]:
+        if self.cells[1] == self.cells[2] and self.cells[2] == self.cells[3]:
             return self.cells[1]
-        if self.cells[4] == self.cells[5] == self.cells[6]:
+        if self.cells[4] == self.cells[5] and self.cells[5] == self.cells[6]:
             return self.cells[4]
-        if self.cells[7] == self.cells[8] == self.cells[9]:
+        if self.cells[7] == self.cells[8] and self.cells[8] == self.cells[9]:
             return self.cells[7]
         
         #Verticals
-        if self.cells[1] == self.cells[4] == self.cells[7]:
+        if self.cells[1] == self.cells[4] and self.cells[4] == self.cells[7]:
             return self.cells[1]
-        if self.cells[2] == self.cells[5] == self.cells[8]:
+        if self.cells[2] == self.cells[5] and self.cells[5] == self.cells[8]:
             return self.cells[2]
-        if self.cells[3] == self.cells[6] == self.cells[9]:
+        if self.cells[3] == self.cells[6] and self.cells[6] == self.cells[9]:
             return self.cells[3]
         
 
@@ -89,21 +89,18 @@ class Board():
 # Next the contestants class.
 # This class I used to decide who will be the O and the X.
 class Contestants():
-
-    # TODO with what did we start the board class?
     def __init__(self):
         self.player = ""
         self.computer = ""
         self.choice = ["X", "O"]
-    
-    # TODO method that will decide who is who.
+
     def who_is_who(self):
         random_int = random.randint(0, 1)
         self.player = self.choice[random_int]
         if self.player == "X":
-            self.computer == "O"
+            self.computer = "O"
         else:
-            self.computer == "X"
+            self.computer = "X"
 
 
 # Next is the Game play.
@@ -122,7 +119,6 @@ class Contestants():
 # Right now it decides where to make a move randomly, that is not so clever.
 board = Board()
 board.clear_screen()
-board.drawBoard()
 
 contestant = Contestants()
 contestant.who_is_who()
@@ -137,50 +133,51 @@ if player == "X":
         player_turn = True
         while player_turn:
             player_move = int(input("Enter a number 1-9: "))
-            if not board.check_cell_empty(player_move):
-                board.update_cell(player_move, player)
-                player_turn = False
+            if player_move < 10 and player_move > 0:
+                if not board.check_cell_empty(player_move):
+                    board.update_cell(player_move, player)
+                    board.drawBoard()
+                    player_turn = False
+                else:
+                    print("Already taken")
             else:
-                print("Already taken")
-                player_move = int(input("Enter a number 1-9: "))
-            
+                print("Please enter a number from 1-9.")    
+
         if board.check_winner():
+            print("We have a winner\n")
             if board.check_winner() == player:
-                board.drawBoard()
                 print("Player has won.")
             else:
-                board.drawBoard()
                 print("Computer has won")
             game_is_on = False
+        else:
+            print("Still no winner")
+            print("Computer will play.")
+            computer_turn = True
+            while computer_turn:
+                computer_move = random.randint(1, 9)
+                if not board.check_cell_empty(computer_move):
+                    board.update_cell(computer_move, computer)
+                    computer_turn = False
         
-        computer_turn = True
-        while computer_turn:
-            computer_move = random.randint(1, 10)
-            if not board.check_cell_empty(computer_move):
-                board.update_cell(computer_move, computer)
-                computer_turn = False
-            else:
-                print("Already taken")
-                computer_move = random.randint(1, 10)
-    
-        if board.check_winner():
-            if board.check_winner() == computer:
-                board.drawBoard()
-                print("Computer has won.")
-            else:
-                board.drawBoard()
-                print("Player has won")
-            game_is_on = False
+            if board.check_winner():
+                if board.check_winner() == computer:
+                    board.drawBoard()
+                    print("Computer has won.")
+                else:
+                    board.drawBoard()
+                    print("Player has won")
+                game_is_on = False
 else:
     print("Computer will start")
     game_is_on = True
     while game_is_on:
-        board.drawBoard()
         computer_turn = True
         while computer_turn:
-            computer_move = random.randint(1, 10)
+            computer_move = random.randint(1, 9)
             if not board.check_cell_empty(computer_move):
                 board.update_cell(computer_move, computer)
+                board.drawBoard()
                 computer_turn = False
     
         if board.check_winner():
@@ -195,10 +192,13 @@ else:
         player_turn = True
         while player_turn:
             player_move = int(input("Enter a number 1-9: "))
-            if not board.check_cell_empty(player_move):
-                board.update_cell(player_move, player)
-                player_turn = False
-            
+            if player_move < 10 and player_move > 0:
+                if not board.check_cell_empty(player_move):
+                    board.update_cell(player_move, player)
+                    player_turn = False
+            else:
+                print("Please enter a number from 1-9.")
+
         if board.check_winner():
             if board.check_winner() == player:
                 board.drawBoard()
@@ -207,4 +207,5 @@ else:
                 board.drawBoard()
                 print("Computer has won")
             game_is_on = False
+
 print("Thank you for playing!")

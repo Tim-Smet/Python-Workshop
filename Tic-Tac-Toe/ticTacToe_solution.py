@@ -85,7 +85,7 @@ if player == "X":
         while player_turn:
             if not board.check_cell_empty(player_move):
                 board.update_cell(player_move, player)
-                break
+                player_turn = False
             else:
                 print("This spot is already taken")
                 player_move = int(input("Pick your move, 1-9: ")) 
