@@ -13,3 +13,9 @@
 # print(reverse)
 
 #import antigravity
+
+empty_strings = ["X", ""]
+if not "" in empty_strings:
+    print("It is not here")
+else:
+    print("It is here")
